@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guessing Game</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        input {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<h1>Guessing Game</h1>
+<p>Enter a number between 1 and 9:</p>
+<label for="numberInput"></label><input type="number" id="numberInput" min="1" max="9">
+<button id="numberInputx">ضع رقم بين 1 - 9</button>
+<br>
+<p id="guessText"></p>
+<p id="scoreText"></p>
+
+<script>
+    let N;
+    let target;
+    let tries = 0;
+
+    function startGame() {
+        N = parseInt(document.getElementById("numberInput").value);
+        if (N < 1 || N > 9) {
+            alert("Please enter a number between 1 and 9.");
+            return;
+        }
+
+        target = [];
+        for (let i = 1; i <= N; i++) {
+            target.push(i);
+        }
+        shuffleArray(target);
+
+        console.log(target);
+        tries = 0;
+        document.getElementById("guessText").innerText = "Enter your guess (no spaces):";
+        document.getElementById("scoreText").innerText = "";
+    }
+
+    function shuffleArray(array) {
+        array.sort(() => Math.random() - 0.5);
+    }
+
+    function checkGuess() {
+        const guessString = document.getElementById("numberInput").value;
+        if (guessString.length !== N) {
+            alert(`Please enter exactly ${N} digits.`);
+            return;
+        }
+
+        const guessArray = guessString.split("").map(Number);
+        let score = 0;
+        for (let i = 0; i < N; i++) {
+            if (guessArray[i] === target[i]) {
+                score++;
+            }
+        }
+
+        document.getElementById("guessText").innerText = `Your guess: ${guessString}`;
+        document.getElementById("scoreText").innerText = `Score: ${score}`;
+
+        tries++;
+        if (score === N) {
+            alert(`Congrats! You won in ${tries} tries.`);
+            document.getElementById("numberInput").value = "";
+            N = null;
+        }
+    }
+
+    document.getElementById("numberInputx").addEventListener(
+        "click",
+        function(event) {
+            if (N) {
+                checkGuess();
+                document.getElementById("numberInput").value = "";
+            } else {
+                startGame();
+                document.getElementById("numberInput").value = "";
+                document.getElementById("numberInputx").innerText = "خمن";
+            }
+        });
+
+</script>
+</body>
+</html>
